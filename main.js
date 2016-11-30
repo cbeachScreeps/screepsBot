@@ -1,13 +1,12 @@
-const roleWorker = require('role.worker');
 const utils = require('utilities');
+const PriorityQueue = require('PriorityQueue');
 
 module.exports.loop = function () {
     console.log(`time: ${Game.time}`);
     for (var r in Game.rooms) {
-        if (!Game.rooms[r].memory.collectionsPoints) {
-            Game.rooms[r].memory.collectionPoints = {};
+        if (Game.rooms[r].memory.queue) {
+            Game.rooms[r].memory.queue = new PriorityQueue(priorityFunction);
         }
-        Game.rooms[r].memory.collectionPoints.energy = utils.getEnergyCollectionPoints(Game.rooms[r]);
     }
   
     for (var name in Memory.creeps) {
