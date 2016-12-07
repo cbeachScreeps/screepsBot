@@ -21,13 +21,17 @@ var roleHarvester = {
                 creep.memory.cP = cP
                 
             } else {
-                let pos = creep.memory.cP.pos;
-                let cPStatus = new RoomPosition(pos.x, pos.y, creep.room.name).look().some((p) => {
-                    return p.type === 'creep';
-                })
-                if (cPStatus) {
-                    delete creep.memory.cP;
-                    return;
+                let cP = creep.memory.cP;
+                if (creep.pos.x !== cP.pos.x && creep.pos.y !== cP.pos.y) {
+                    let pos = creep.memory.cP.pos;
+                    let cPStatus = new RoomPosition(pos.x, pos.y, creep.room.name).look().some((p) => {
+                        return p.type === 'creep';
+                    })
+                    
+                    if (cPStatus) {
+                        delete creep.memory.cP;
+                        return;
+                    }
                 }
                 let harvestStatus = creep.harvest(Game.getObjectById(creep.memory.cP.sourceID));
                 switch(harvestStatus) {
