@@ -68,8 +68,7 @@ const getEnergyCollectionPoints = (room) => {
         for (var p in somePoints) {
             somePoints[p].sourceID = sources[s].id;
             somePoints[p].pos = {};
-            somePoints[p].pos.x = somePoints[p].x
-            somePoints[p].pos.y = somePoints[p].y
+            somePoints[p].pos = new RoomPosition(somePoints[p].x, somePoints[p].y, room.name);
             collectionPoints.push(somePoints[p]);
         }
         // console.log('somePoints');

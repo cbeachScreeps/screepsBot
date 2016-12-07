@@ -1,6 +1,7 @@
 const C = require('constants');
 const harvest = require('role.harvester');
 const upgrade = require('role.upgrader');
+const build = require('role.builder');
 
 function delegate(creep) {
     let storageStructures = creep.room.find(FIND_STRUCTURES, {
@@ -18,12 +19,18 @@ function delegate(creep) {
     })
     
     if (totalEnergy === totalEnergyCapacity && creep.memory.task === C.TASK_HARVEST && _.sum(creep.carry) === creep.carryCapacity) {
-        return C.TASK_UPGRADE;
-    } else if (_.sum(creep.carry) === 0 && creep.memory.task === C.TASK_UPGRADE) {
+        var sites = creep.room.find(FIND_CONSTRUCTION_SITES);
+        if (sites.length > 0) {
+            return Math.random() > 0.4 ? C.TASK_UPGRADE : C.TASK_BUILD;
+        } else {
+            return C.TASK_UPGRADE;
+        }
+    } else if (_.sum(creep.carry) === 0 && creep.memory.task !== C.TASK_HARVEST) {
         return C.TASK_HARVEST;
     } else if (!creep.memory.task) {
         return C.TASK_HARVEST;
     } else {
+        //return C.TASK_HARVEST;
         return creep.memory.task;
     }
 }
@@ -37,6 +44,9 @@ module.exports = {
                 break;
             case C.TASK_UPGRADE:
                 upgrade.run(creep);    
+                break;
+            case C.TASK_BUILD:
+                build.run(creep);    
                 break;
         } 
     }
