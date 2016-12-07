@@ -13,7 +13,6 @@ const processSpawns = (spawn) => {
     }
 }
 
-
 module.exports = (room) => {
     let spawns = room.find(FIND_STRUCTURES, {
         filter: (structure) => {

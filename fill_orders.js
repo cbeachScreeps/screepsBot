@@ -1,7 +1,10 @@
 const C = require('constants');
 
-module.exports = {
-    creeps: (room) => {
+const creeps = (room) => {
         
-    }
+}
+
+
+module.exports = (room) => {
+    
 }
