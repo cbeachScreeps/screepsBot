@@ -1,13 +1,21 @@
+const C = require('constants');
 const utils = require('utilities');
 const PriorityQueue = require('PriorityQueue');
 const roleWorker = require('role.worker');
+const fillQueue = require('work_orders');
+const fillOrders = require('fill_order');
+
 
 module.exports.loop = function () {
     console.log(`time: ${Game.time}`);
     for (var r in Game.rooms) {
-        if (Game.rooms[r].memory.queue) {
-            Game.rooms[r].memory.queue = new PriorityQueue(priorityFunction);
+        let room = Game.rooms[r];
+        if (room.memory.queue) {
+            room.memory.queue = new PriorityQueue(priorityFunction);
         }
+        // Check
+        fillQueue(room);
+        claimOrders(room);
         var workers = _.filter(Game.creeps, (creep) => creep.memory.role == 'worker');
         if (workers.length < 6) { //Game.rooms[room].memory.collectionPoints.energy.length) {
             console.log('spawning worker');

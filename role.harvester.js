@@ -26,25 +26,19 @@ var roleHarvester = {
                     case OK: 
                         break;
                     case ERR_NOT_OWNER: 
-                        console.log('ERR_NOT_OWNER');
                         break;
                     case ERR_BUSY: 
-                        console.log('ERR_BUSY');
                         break;
                     case ERR_NOT_FOUND: 
-                        console.log('ERR_NOT_FOUND');
                         break;
                     case ERR_NOT_ENOUGH_RESOURCES: 
-                        console.log('ERR_NOT_ENOUGH_RESOURCES');
                         break;
                     case ERR_INVALID_TARGET: 
-                        console.log('ERR_INVALID_TARGET');
                         break;
                     case ERR_NOT_IN_RANGE:
                         creepUtils.moveTo(creep, creep.memory.cP);
                         break;
                     case ERR_NO_BODYPART: 
-                        console.log('ERR_NO_BODYPART');
                         break;
                 }
             }
@@ -79,27 +73,17 @@ var roleHarvester = {
                 }
                 return true;
             });
-            console.log(JSON.stringify(sources, null, 2));
-            console.log(sources.length);
             
             if (!creep.memory.source) {
                 creep.memory.source = Math.floor(Math.random() * sources.length);
             }
             let status = creep.harvest(sources[creep.memory.source].source);
-            // console.log(`status: ${status}`);
-            // console.log(`source: ${JSON.stringify(sources[creep.memory.source].pos, null, 2)}`);//, ${sources[creep.memory.source]}`)
             if(status !== OK) {
                 let mTRV = creep.moveByPath(creep.memory.pathToSource);
                 if (!creep.memory.pathToSource || mTRV !== 0) {
-                    console.log(`getting a new path for ${creep}`);
                     creep.memory.pathToSource = creep.pos.findPathTo(sources[creep.memory.source].x, sources[creep.memory.source].y)
                 }
-                if (mTRV !== 0) {
-                    console.log(`mTRV: ${mTRV}`);
-                    console.log(`path: ${creep.memory.pathToSource}`);
-                }
             }
-            
 	    } else {
 	        delete creep.memory.source;
             var targets = creep.room.find(FIND_STRUCTURES, {

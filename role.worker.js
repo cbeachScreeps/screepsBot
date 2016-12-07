@@ -18,17 +18,12 @@ function delegate(creep) {
     })
     
     if (totalEnergy === totalEnergyCapacity && creep.memory.task === C.TASK_HARVEST && _.sum(creep.carry) === creep.carryCapacity) {
-        console.log('1');
         return C.TASK_UPGRADE;
     } else if (_.sum(creep.carry) === 0 && creep.memory.task === C.TASK_UPGRADE) {
-        console.log('2');
         return C.TASK_HARVEST;
     } else if (!creep.memory.task) {
-        console.log('3');
         return C.TASK_HARVEST;
     } else {
-        console.log('4');
-        //return C.TASK_HARVEST;
         return creep.memory.task;
     }
 }
