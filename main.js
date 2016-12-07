@@ -16,10 +16,13 @@ module.exports.loop = function () {
         // Check
         workOrders(room);
         fillOrders(room);
-        var workers = _.filter(Game.creeps, (creep) => creep.memory.role == 'worker');
-        if (workers.length < 6) { //Game.rooms[room].memory.collectionPoints.energy.length) {
+        //var workers = _.filter(Game.creeps, (creep) => creep.memory.role == 'worker');
+        let cPs = utils.getEnergyCollectionPoints(room)
+        console.log(`cPs.length: ${cPs.length}`);
+        //if (workers.length < 7) { //Game.rooms[room].memory.collectionPoints.energy.length) {
+        if (cPs.length > 0) {
             console.log('spawning worker');
-            Game.spawns['Spawn1'].createCreep([MOVE, CARRY, WORK], undefined, {role: 'worker'});
+            Game.spawns['Spawn1'].createCreep([MOVE, CARRY, WORK, WORK], undefined, {role: 'worker'});
         }
     }
   
