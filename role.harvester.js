@@ -9,7 +9,7 @@ var roleHarvester = {
                 // retain the selected source
                 let cPs = utils.sortByDistance(creep.pos, utils.getEnergyCollectionPoints(creep.room));
                 cPs = utils.notInRangeOfEnemy(creep.room, cPs);
-                let cP = utils.filterUnclaimedCollectionPoints(cPs)[0];
+                let cP = cPs[0];
                 if (!creep.room.memory.cPs) {
                     creep.room.memory.cPs = {}
                 }
@@ -21,6 +21,14 @@ var roleHarvester = {
                 creep.memory.cP = cP
                 
             } else {
+                let pos = creep.memory.cP.pos;
+                let cPStatus = new RoomPosition(pos.x, pos.y, creep.room.name).look().some((p) => {
+                    return p.type === 'creep';
+                })
+                if (cPStatus) {
+                    delete creep.memory.cP;
+                    return;
+                }
                 let harvestStatus = creep.harvest(Game.getObjectById(creep.memory.cP.sourceID));
                 switch(harvestStatus) {
                     case OK: 
