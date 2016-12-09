@@ -8,21 +8,39 @@
  */
 
 const distance = (pos1, pos2) => {
+    //console.log(`x1: ${pos1.x}, x2: ${pos2.x}`);
+    //console.log(`y1: ${pos1.y}, y2: ${pos2.y}`);
+    //console.log(`x diff: ${Math.pow(pos1.x - pos2.x, 2)}`);
+    //console.log(`y diff: ${Math.pow(pos1.y - pos2.y, 2)}`);
+    //console.log(`pow: ${Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2)}`);
+    //console.log(`dist: ${Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2))}`);
     return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
 };
 
 const sortByDistance = (pos, posArray) => {
-    return posArray.sort((a, b) => {
+    let sortedArray = posArray.sort((a, b) => {
+        if (a.hasOwnProperty(pos)) {
+            a = a.pos;
+        }
+        if (b.hasOwnProperty(pos)) {
+            b = b.pos;
+        }
         let distA = distance(pos, a);
         let distB = distance(pos, b);
+        //console.log(`distA: ${distA}`);
+        //console.log(`distB: ${distB}`);
         if (distA > distB) {
+            //console.log('return 1');
             return 1;
         } else if (distA < distB) {
+            //console.log('return -1');
             return -1;
         } else {
+            //console.log('return 0');
             return 0;
         }
     });
+    return sortedArray;
 };
 
 const getEnergyCollectionPoints = (room) => {
@@ -63,7 +81,8 @@ const getEnergyCollectionPoints = (room) => {
         somePoints[8].x = x + 1;
         somePoints[8].y = y + 1;
         somePoints = _.filter(somePoints, (point) => {
-           return point.type === 'terrain' && (point.terrain === 'plain' || point.terrain === 'swamp');
+            //console.log(JSON.stringify(new RoomPosition(point.x, point.y, room.name).look()));
+            return point.type === 'terrain' && (point.terrain === 'plain' || point.terrain === 'swamp');
         });
         for (var p in somePoints) {
             somePoints[p].sourceID = sources[s].id;

@@ -1,4 +1,5 @@
 const C = require('constants');
+const utils = require('utilities');
 const harvest = require('role.harvester');
 const upgrade = require('role.upgrader');
 const build = require('role.builder');
@@ -6,9 +7,9 @@ const build = require('role.builder');
 function delegate(creep) {
     let storageStructures = creep.room.find(FIND_STRUCTURES, {
         filter: (structure) => {
-            return (structure.structureType == STRUCTURE_EXTENSION 
-                    || structure.structureType == STRUCTURE_SPAWN) 
-                    && structure.energy < structure.energyCapacity;
+            return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_CONTAINER
+                        || structure.structureType == STRUCTURE_TOWER) 
+                        && (structure.energy < structure.energyCapacity || _.sum(structure.store) < structure.storeCapacity);
         }
     });
     let totalEnergyCapacity = 0;
@@ -17,20 +18,26 @@ function delegate(creep) {
         totalEnergyCapacity += storage.energyCapacity;
         totalEnergy += storage.energy;
     })
+    let cPs = utils.sortByDistance(creep.pos, utils.getEnergyCollectionPoints(creep.room));
     
     if (totalEnergy === totalEnergyCapacity && creep.memory.task === C.TASK_HARVEST && _.sum(creep.carry) === creep.carryCapacity) {
         var sites = creep.room.find(FIND_CONSTRUCTION_SITES);
+        console.log(sites);
         if (sites.length > 0) {
-            return Math.random() > 0.4 ? C.TASK_UPGRADE : C.TASK_BUILD;
+            //creep.say('building');
+            return Math.random() < .1 ? C.TASK_UPGRADE : C.TASK_BUILD;
         } else {
+            //creep.say('upgrading');
             return C.TASK_UPGRADE;
         }
     } else if (_.sum(creep.carry) === 0 && creep.memory.task !== C.TASK_HARVEST) {
+        //creep.say('harvesting');
         return C.TASK_HARVEST;
     } else if (!creep.memory.task) {
+        //creep.say('harvesting');
         return C.TASK_HARVEST;
     } else {
-        //return C.TASK_HARVEST;
+        //creep.say('memory');
         return creep.memory.task;
     }
 }

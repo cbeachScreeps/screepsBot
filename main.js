@@ -3,28 +3,61 @@ const PriorityQueue = require('PriorityQueue');
 const roleWorker = require('role.worker');
 
 module.exports.loop = function () {
-    console.log(`time: ${Game.time}`);
     for (var r in Game.rooms) {
         let room = Game.rooms[r];
+        let sortedArray = room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType === STRUCTURE_EXTENSION;
+            }
+        })
+        //console.log('==============================>');
+        sortedArray.forEach((poi) => {
+            //console.log(utils.distance(Game.spawns['Spawn1'].pos, poi.pos));
+        });
+        //console.log('==============================');
+        sortedArray = utils.sortByDistance(Game.spawns['Spawn1'].pos, room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType === STRUCTURE_EXTENSION;
+            }
+        }));
+        sortedArray.forEach((poi) => {
+            //console.log(`poi: ${JSON.stringify(poi.pos)}`);
+            //console.log(utils.distance(Game.spawns['Spawn1'].pos, poi.pos));
+        });
+        //console.log('<==============================');
         utils.getEnergyCollectionPoints(room)
         if (Game.rooms[r].memory.queue) {
             Game.rooms[r].memory.queue = new PriorityQueue(priorityFunction);
         }
-        //var workers = _.filter(Game.creeps, (creep) => creep.memory.role == 'worker');
+        var workers = _.filter(Game.creeps, (creep) => creep.memory.role == 'worker');
         let cPs = utils.getEnergyCollectionPoints(room)
-        console.log(`cPs.length: ${cPs.length}`);
-        //if (workers.length < 7) { //Game.rooms[room].memory.collectionPoints.energy.length) {
-        if (cPs.length > 0) {
-            if (!room.memory.cPTurnsEmpty) {
-                room.memory.cPTurnsEmpty = 0;
-            } else if (room.memory.cPTurnsEmpty > 3) {
-                room.memory.cPTurnsEmpty++;
-                console.log('spawning worker');
-                Game.spawns['Spawn1'].createCreep([MOVE, CARRY, WORK, WORK], undefined, {role: 'worker'});    
-            }
+        if (workers.length < 10) { //Game.rooms[room].memory.collectionPoints.energy.length) {
+        //if (cPs.length > 0) {
+            //if (room.memory.cPTurnsEmpty === undefined) {
+            //    room.memory.cPTurnsEmpty = 0;
+            //} else if (room.memory.cPTurnsEmpty > 20) {
+            //    room.memory.cPTurnsEmpty = 0;
+            //    Game.spawns['Spawn1'].createCreep([MOVE, CARRY, CARRY, CARRY, CARRY, WORK, WORK, WORK], undefined, {role: 'worker'});    
+            //} else {
+            //    room.memory.cPTurnsEmpty++;
+            //}
+            Game.spawns['Spawn1'].createCreep([MOVE, MOVE, MOVE, CARRY, MOVE, CARRY, MOVE, WORK, WORK, WORK], undefined, {role: 'worker'});    
         } else {
             room.memory.cPTurnsEmpty = 0;
         }
+        
+        room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType === STRUCTURE_TOWER;
+            }
+        }).forEach((tower) => {
+            let structures = room.find(FIND_STRUCTURES).filter((s) => {
+                return s.hits < s.hitsMax;
+            });
+            if (structures.length > 0) {
+                tower.repair(structures[0]);
+            }
+        })
     }
   
     for (var name in Memory.creeps) {
