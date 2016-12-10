@@ -65,8 +65,9 @@ var roleHarvester = {
                     }
             });
             if(targets.length > 0) {
-                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creepUtils.moveTo(creep, targets[0]);
+                let target = creep.pos.findClosestByRange(targets);
+                if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creepUtils.moveTo(creep, target);
                 }
             }
         }

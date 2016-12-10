@@ -19,9 +19,14 @@ function delegate(creep) {
         totalEnergy += storage.energy;
     })
     let cPs = utils.sortByDistance(creep.pos, utils.getEnergyCollectionPoints(creep.room));
+    var sites = creep.room.find(FIND_CONSTRUCTION_SITES);
     
+    if (sites.length === 0 && creep.memory.task === C.TASK_BUILD) {
+        // clean up the builders after they're done building
+        creep.memory.task = C.TASK_HARVEST;
+    }
+
     if (totalEnergy === totalEnergyCapacity && creep.memory.task === C.TASK_HARVEST && _.sum(creep.carry) === creep.carryCapacity) {
-        var sites = creep.room.find(FIND_CONSTRUCTION_SITES);
         console.log(sites);
         if (sites.length > 0) {
             //creep.say('building');
