@@ -54,7 +54,21 @@ module.exports.loop = function () {
             let structures = room.find(FIND_STRUCTURES).filter((s) => {
                 return s.hits < s.hitsMax;
             });
-            if (structures.length > 0) {
+            let closestHostileHealer = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
+                filter: function(object) {
+                    return object.getActiveBodyparts(HEAL) == 0;
+                }
+            })
+            let closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {
+                filter: function(object) {
+                    return object.getActiveBodyparts(HEAL) == 0;
+                }
+            })
+            if (closestHostileHealer) {
+                tower.attack(closestHostileHealer)
+            } else if(closestHostile) {
+                tower.attack(closestHostile)
+            } else if (structures.length > 0) {
                 tower.repair(structures[0]);
             }
         })
