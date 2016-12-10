@@ -1,4 +1,9 @@
 const C = require('constants');
+const utils = require('utilities');
+
+const collectionPoint = (room) => {
+    let cPs = utils.getEnergyCollectionPoints(room); 
+}
 
 const processSpawns = (spawn) => {
     if (spawn && spawn.energy < spawn.energyCapacity) {
