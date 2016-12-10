@@ -1,6 +1,5 @@
 const C = require('constants');
 const utils = require('utilities');
-const harvest = require('role.harvester');
 const upgrade = require('role.upgrader');
 const build = require('role.builder');
 
@@ -18,7 +17,7 @@ function delegate(creep) {
         totalEnergyCapacity += storage.energyCapacity;
         totalEnergy += storage.energy;
     })
-    let cPs = utils.sortByDistance(creep.pos, utils.getEnergyCollectionPoints(creep.room));
+    let cPs = utils.getEnergyCollectionPoints(creep.room);
     var sites = creep.room.find(FIND_CONSTRUCTION_SITES);
     
     if (sites.length === 0 && creep.memory.task === C.TASK_BUILD) {
@@ -27,7 +26,7 @@ function delegate(creep) {
     }
 
     if (totalEnergy === totalEnergyCapacity && creep.memory.task === C.TASK_HARVEST && _.sum(creep.carry) === creep.carryCapacity) {
-        console.log(sites);
+        var sites = creep.room.find(FIND_CONSTRUCTION_SITES);
         if (sites.length > 0) {
             //creep.say('building');
             return Math.random() < .1 ? C.TASK_UPGRADE : C.TASK_BUILD;

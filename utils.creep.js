@@ -1,14 +1,18 @@
 const utils = require('utilities');
 
 const moveTo = (creep, dest) => {
-    if (!creep.memory.pathToDest) {
-        creep.memory.pathToDest = creep.pos.findPathTo(dest.pos.x, dest.pos.y)    
+    if (dest.hasOwnProperty('pos')) {
+        dest = dest.pos
     }
+    if (!creep.memory.pathToDest) {
+        creep.memory.pathToDest = creep.pos.findPathTo(dest.x, dest.y)    
+    } 
+
     let pathLength = creep.memory.pathToDest.length;
-    if (creep.memory.pathToDest[pathLength - 1].x !== dest.pos.x
-        || creep.memory.pathToDest[pathLength - 1].y !== dest.pos.y) {
-        
-        creep.memory.pathToDest = creep.pos.findPathTo(dest.pos.x, dest.pos.y)    
+    if (pathLength > 0 
+        && (creep.memory.pathToDest[pathLength - 1].x !== dest.x
+            || creep.memory.pathToDest[pathLength - 1].y !== dest.y)) {
+        creep.memory.pathToDest = creep.pos.findPathTo(dest.x, dest.y)    
     }
     let moveStatus = creep.moveByPath(creep.memory.pathToDest)
     switch(moveStatus) {

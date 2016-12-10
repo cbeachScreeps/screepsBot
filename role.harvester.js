@@ -7,7 +7,7 @@ var roleHarvester = {
         if (creep.carry.energy < creep.carryCapacity) {
             if (!creep.memory.cP) {
                 // retain the selected source
-                let cPs = utils.sortByDistance(creep.pos, utils.getEnergyCollectionPoints(creep.room));
+                let cPs = utils.getEnergyCollectionPoints(creep.room);
                 cPs = utils.notInRangeOfEnemy(creep.room, cPs);
                 let cP = cPs[0];
                 if (!creep.room.memory.cPs) {
