@@ -26,12 +26,12 @@ module.exports.loop = function () {
         });
         //console.log('<==============================');
         utils.getEnergyCollectionPoints(room)
-        if (Game.rooms[r].memory.queue) {
+        if (!Game.rooms[r].memory.queue) {
             Game.rooms[r].memory.queue = new PriorityQueue(priorityFunction);
         }
         var workers = _.filter(Game.creeps, (creep) => creep.memory.role == 'worker');
         let cPs = utils.getEnergyCollectionPoints(room)
-        if (workers.length < 10) { //Game.rooms[room].memory.collectionPoints.energy.length) {
+        if (workers.length < 20) { //Game.rooms[room].memory.collectionPoints.energy.length) {
         //if (cPs.length > 0) {
             //if (room.memory.cPTurnsEmpty === undefined) {
             //    room.memory.cPTurnsEmpty = 0;
