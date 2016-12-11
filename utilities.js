@@ -18,7 +18,7 @@ const distance = (pos1, pos2) => {
 };
 
 const getEnergyCollectionPoints = (source) => {
-   
+    let room = source.room; 
     let collectionPoints = [];
     let x = source.pos.x;
     let y = source.pos.y;
@@ -53,9 +53,8 @@ const getEnergyCollectionPoints = (source) => {
     return _.filter(collectionPoints, (point) => {
         return point.type === 'terrain' && (point.terrain === 'plain' || point.terrain === 'swamp');
     }).map((point) => {
+        point.pos.sourceID = source.id;
         return point.pos;
-    }).forEach((point) => {
-        point.sourceID = source.id;
     });
 }
 

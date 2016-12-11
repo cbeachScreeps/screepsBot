@@ -12,19 +12,15 @@ module.exports.loop = function () {
             delete Memory.creeps[name];
         }
     }
-    let queue = new PriorityQueue();
-    queue._elements = Memory.jobQueue;
-    Memory.jobQueue = queue;
-
-    if (!Memory.jobQueue) {
-        Memory.jobQueue = queue._elements
-    }
+    Memory['jobQueue'] = new PriorityQueue();
+    Memory['jobQueue']['_elements'] = Memory['elements'];
 
     for (var r in Game.rooms) {
         let room = Game.rooms[r];
 
         workOrders(room);
-        fillOrders(room);
+        //console.log(`queueLength: ${queue._elements.length}`);
+        //fillOrders(room);
 
         // Spawn creeps
         var workers = _.filter(Game.creeps, (creep) => creep.memory.role == 'worker');
@@ -33,8 +29,8 @@ module.exports.loop = function () {
         }         
     }
     // Put the Job Queue in a format that will save.
-    queue = Memory.jobQueue;
-    Memory.jobQueue = queue._elements;
+    queue = Memory['jobQueue'];
+    Memory['elements'] = Memory['jobQueue']['_elements'];
     return; 
     // ==================================================================================================================
     
